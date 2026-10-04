@@ -43,6 +43,13 @@
   .height-interval { top: 1px; }
 }
 
+@media (min-height: 40em) {
+  .height-em-query { top: 1px; }
+}
+@media (max-height: 40em) {
+  .height-em-max-query { right: 1px; }
+}
+
 :root {
   --foo: 120 50% 50%;
   --bar: 0.7 0.1 141;

@@ -155,7 +155,7 @@ Height breakpoints use custom variants instead of `--breakpoint-*` (which define
 
 ```css
 @custom-variant tall (@media (min-height: 700px));
-@custom-variant compact (@media (max-height: 699px));
+@custom-variant compact (@media (max-height: 700px));
 ```
 
 ```tsx

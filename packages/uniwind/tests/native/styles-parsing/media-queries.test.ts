@@ -58,6 +58,28 @@ describe('height media queries', () => {
         expect(resolveAtSize('height-self-relative', 390, 1000)).toEqual({})
     })
 
+    test('resolves em height bounds against the initial font size', () => {
+        expect(resolveAtSize('height-em-query height-em-max-query', 390, 639)).toEqual({ right: 1 })
+        expect(resolveAtSize('height-em-query height-em-max-query', 390, 640)).toEqual({ top: 1, right: 1 })
+        expect(resolveAtSize('height-em-query height-em-max-query', 390, 641)).toEqual({ top: 1 })
+    })
+
+    test.each([
+        'taller:top-[2px] dark:tall:top-[1px]',
+        'dark:tall:top-[1px] taller:top-[2px]',
+    ])('keeps theme specificity ahead of height in %s', className => {
+        resolveAtSize('', 390, 900)
+        expect(UniwindStore.getStyles(className, {}, {}, { scopedTheme: 'dark', rtl: null, variables: null }).styles)
+            .toEqual({ top: 1 })
+    })
+
+    test.each([
+        'taller:top-[2px] tall:top-[1px]!',
+        'tall:top-[1px]! taller:top-[2px]',
+    ])('keeps important declarations ahead of height in %s', className => {
+        expect(resolveAtSize(className, 390, 900)).toEqual({ top: 1 })
+    })
+
     test('requires both width and height constraints to match', () => {
         expect(resolveAtSize('wide-and-tall', 499, 800)).toEqual({})
         expect(resolveAtSize('wide-and-tall', 600, 699)).toEqual({})

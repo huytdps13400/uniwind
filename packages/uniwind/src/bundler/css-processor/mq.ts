@@ -71,7 +71,11 @@ export class MQ {
 
         const minKey = name === 'height' ? 'minHeight' : 'minWidth'
         const maxKey = name === 'height' ? 'maxHeight' : 'maxWidth'
-        const result = this.Processor.CSS.processValue(value)
+        // Media-query em units refer to the initial font size, just like rem,
+        // rather than an element's (possibly scoped) font-size variable.
+        const result = value.type === 'length' && value.value.type === 'value' && value.value.value.unit === 'em'
+            ? this.Processor.Units.processLength({ ...value.value.value, unit: 'rem' })
+            : this.Processor.CSS.processValue(value)
         const setBound = (key: typeof minKey | typeof maxKey, bound: any, operation: 'min' | 'max') => {
             mq[key] = typeof mq[key] === 'number' && typeof bound === 'number'
                 ? Math[operation](mq[key], bound)

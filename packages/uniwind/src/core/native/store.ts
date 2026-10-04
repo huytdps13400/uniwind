@@ -174,7 +174,12 @@ class UniwindStoreBuilder {
 
                     if (previousBest) {
                         const previousWins = previousBest.minWidth > style.minWidth
-                            || (previousBest.minWidth === style.minWidth && resolveHeightBound(previousBest.minHeight) > minHeight)
+                            || (
+                                previousBest.minWidth === style.minWidth
+                                && previousBest.complexity === style.complexity
+                                && !style.importantProperties.includes(property)
+                                && resolveHeightBound(previousBest.minHeight) > minHeight
+                            )
                             || previousBest.complexity > style.complexity
                             || (
                                 previousBest.complexity === style.complexity
